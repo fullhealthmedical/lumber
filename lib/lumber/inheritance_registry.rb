@@ -57,6 +57,11 @@ module Lumber
         Object.class_eval do
 
           class << self
+            alias_method :inherited_without_lumber_registry, :inherited
+
+            def inherited(subclass)
+              inherited_with_lumber_registry(subclass)
+            end
 
             def inherited_with_lumber_registry(subclass)
               inherited_without_lumber_registry(subclass)
@@ -69,8 +74,6 @@ module Lumber
                 subclass.send(:include, Lumber.logger_concern)
               end
             end
-
-            alias_method_chain :inherited, :lumber_registry
 
           end
 
